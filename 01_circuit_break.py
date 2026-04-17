@@ -56,4 +56,3 @@ def call_api(url, payload=None):
 
     return None   
    
-
