@@ -1,7 +1,6 @@
 # Sandbox
 
-A collection of 20 atomic engineering primitives I wrote to master Python internals, 
-distributed systems, and high-performance data architecture.
+A collection of atomic primitives I wrote to master python internals, distributed systems, and high-performance data architecture.
 
 ## Primitives
 
@@ -14,3 +13,5 @@ distributed systems, and high-performance data architecture.
 04 - Rate-Limited Token Bucket: fetches 10,000 URLs using asyncio and aiohttp under a strict 50 requests-per-second ceiling. A token bucket refills continuously at the rate limit and is consumed before each request. A fixed pool of 100 workers pulls from a bounded queue (maxsize=200), creating natural backpressure so the event loop is never flooded with thousands of live coroutines simultaneously. Rate control and concurrency control are kept separate, so the bucket governs RPS, the worker pool governs parallelism.
 
 05 - Write-Ahead Log (WAL): a tiny database implementation focused on core database internals and ACID durability. Before updating the in-memory dictionary, it appends the command (e.g SET AAPL 60000) to a raw text file on disk. If the process is killed mid-run and restarted, the system uses custom logic to parse the text file and rebuild the exact previous state.
+
+06 - LRU Cache with TTL: a from-scratch cache implementation built on a doubly linked list and a hash map, achieving O(1) lookups and evictions without any external dependencies like Redis. The list maintains access order on every get or set, the accessed node is promoted to the head. When capacity is exceeded, the tail node (least recently used) is evicted in constant time. Each entry is stamped with an insertion time and a 5-second TTL; expired keys are invalidated lazily on access rather than via a background sweep.
